@@ -31,7 +31,7 @@ async function getNftTokens() {
     }
 }
 
-async function hello() {
+async function hello2() {
     try {
         const result = await contract.methods.getNftTokens(account).call();
         return result;
