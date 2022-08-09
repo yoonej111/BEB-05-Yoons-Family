@@ -31,6 +31,16 @@ async function getNftTokens() {
     }
 }
 
+async function hello() {
+    try {
+        const result = await contract.methods.getNftTokens(account).call();
+        return result;
+    } catch (e) {
+        console.log(e);
+        return e;
+    }
+}
+
 module.exports = {
     totalSupply,
     getNftTokens,
