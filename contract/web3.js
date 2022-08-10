@@ -1,19 +1,28 @@
 const { erc721Abi } = require("./erc721Abi");
 const Web3 = require("web3");
-const rpcURL = process.env.RPC_URL; // 원격 이더리움 노드에 접속할 수 있는 주소
-const web3 = new Web3(rpcURL); // web3 객체 생성
-const Contract = require("web3-eth-contract");
-
-const account = process.env.WALLET_ADDR;
 const contract_addr = process.env.CONTRACT_ADDR;
 const abi = erc721Abi;
-const address = contract_addr;
-Contract.setProvider(rpcURL);
-const contract = new Contract(abi, address);
 
+const Provider = require("@truffle/hdwallet-provider");
+const rpcURL = process.env.RPC_URL; // 원격 이더리움 노드에 접속할 수 있는 주소
+const privKey = process.env.PRIV_KEY;
+const account = process.env.WALLET_ADDR;
+
+const provider = new Provider(privKey, rpcURL);
+const web3 = new Web3(provider);
+const myContract = new web3.eth.Contract(abi, contract_addr);
+
+/**
+ *
+ * @returns
+ * @description The totalSupply() function returns the total supply of the tokens.
+ */
 async function totalSupply() {
     try {
-        const result = await contract.methods.totalSupply().call();
+        const result = await myContract.methods
+            .totalSupply()
+            .call({ from: account });
+        console.log(result);
         return result;
     } catch (e) {
         console.log(e);
@@ -21,9 +30,17 @@ async function totalSupply() {
     }
 }
 
+/**
+ *
+ * @returns
+ * @description getNftTokens, 유저가 보유하고 있는 NFT 토큰들을 리턴
+ */
 async function getNftTokens() {
     try {
-        const result = await contract.methods.getNftTokens(account).call();
+        const result = await myContract.methods
+            .getNftTokens(account)
+            .call({ from: account });
+        console.log(result);
         return result;
     } catch (e) {
         console.log(e);
@@ -31,9 +48,12 @@ async function getNftTokens() {
     }
 }
 
-async function hello2() {
+async function mintNFT(imgURL) {
     try {
-        const result = await contract.methods.getNftTokens(account).call();
+        const result = await myContract.methods
+            .mintNFT(account, imgURL)
+            .send({ from: account });
+        console.log("~~~", result);
         return result;
     } catch (e) {
         console.log(e);
@@ -44,6 +64,7 @@ async function hello2() {
 module.exports = {
     totalSupply,
     getNftTokens,
+    mintNFT,
 };
 
 // web3.eth
