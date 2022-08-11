@@ -90,8 +90,6 @@ function Create({ web3, setCollapsed, account }) {
     );
 
     const mint = async () => {
-        console.log("upload");
-
         const NFT_STORAGE_TOKEN =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGE4ZDBCN2IxNmZEMDAzNjA1OUY2ODA2ODBhOTY0Y0Q4RTA1Yzk1NjYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2MDE0MzgwNzIwNywibmFtZSI6IllPT04gRkFNSUxZIn0.Oc37n9p13TvckSJHSS5mU2vaqs-K0646CIFFnRoqwHE";
         const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
@@ -113,10 +111,12 @@ function Create({ web3, setCollapsed, account }) {
             }
         );
 
-        console.log("BEFORE MING", account, metadataUrl);
-        tokenContract.methods.mintNFT(account, metadataUrl).send({
+        console.log("BEFORE MING", account, metadata);
+        tokenContract.methods.mintNFT(account, metadata).send({
             from: account,
         });
+
+        console.log(tokenContract);
     };
 
     useEffect(() => {
